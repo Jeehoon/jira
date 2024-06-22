@@ -1,0 +1,26 @@
+---
+
+on:
+  push:
+    branches:
+      - main
+      - 'releases/**'
+
+jobs:
+  print-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+        with:
+          path: source          
+      
+      - name: "Test"
+        run: make
+        env:
+          JIRA_ENDPOINT: ${{ secrets.JIRA_ENDPOINT }}
+          JIRA_USERNAME: ${{ secrets.JIRA_USERNAME }}
+          JIRA_PASSWORD: ${{ secrets.JIRA_PASSWORD }}
+          JIRA_ISSUE: "ISSUE-4"
+        working-directory: ./source
+          

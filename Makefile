@@ -2,4 +2,5 @@
 
 
 run:
-	go run main.go
+	go build
+	./jira
