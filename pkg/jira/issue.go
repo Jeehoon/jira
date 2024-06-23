@@ -1,10 +1,12 @@
-package main
+package jira
 
 import (
 	"fmt"
 	"strings"
 
 	"github.com/pkg/errors"
+
+	"github.com/jeehoon/jira/adf"
 )
 
 type User struct {
@@ -185,10 +187,10 @@ func (issue *Issue) parseStandardField(fkey string, fvalue any) {
 		issue.Priority = obj["name"].(string)
 
 	case "description":
-		issue.Description = fmt.Sprintf("%+v", fvalue)
+		issue.Description = adf.ToMarkdown(fvalue)
 
 	case "comment":
-		issue.Comment = fmt.Sprintf("%+v", fvalue)
+		issue.Comment = adf.ToMarkdown(fvalue)
 
 	case "watches":
 		obj := fvalue.(map[string]any)
@@ -223,11 +225,7 @@ func (issue *Issue) parseCustomField(fkey string, fmeta *FieldMeta, fvalue any) 
 		issue.CustomFields[fkey] = obj["value"].(string)
 
 	case "string":
-		if _, ok := fvalue.(string); ok {
-			issue.CustomFields[fkey] = fvalue.(string)
-		} else {
-			issue.CustomFields[fkey] = fmt.Sprintf("%+v", fvalue)
-		}
+		issue.CustomFields[fkey] = adf.ToMarkdown(fvalue)
 
 	case "option-with-child":
 		obj := fvalue.(map[string]any)

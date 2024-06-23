@@ -1,11 +1,11 @@
-package main
+package jira
 
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
+	"github.com/jeehoon/jira/internal/debug"
 	"github.com/pkg/errors"
 )
 
@@ -61,6 +61,9 @@ func (client *Client) Do(method string, p string, data []byte, out any) (err err
 	if err := dec.Decode(&out); err != nil {
 		return errors.Wrap(err, "json.Decode")
 	}
+
+	debug.Printf("client.Do %v %v %v", method, p, string(data))
+	debug.DumpJson(out)
 
 	return nil
 }
@@ -140,9 +143,6 @@ func (client *Client) loadAllFields() (err error) {
 	}
 
 	client.fieldMetas = fieldMetas
-
-	log.Printf("The number of FieldMeta: %v", len(client.fieldMetas))
-
 	return nil
 }
 

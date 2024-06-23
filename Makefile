@@ -3,4 +3,4 @@
 
 run:
 	go build
-	./jira
+	./jira issue ISSUE-4
